@@ -1,28 +1,28 @@
 enum ActiveStatus {
   ACTIVE
-  BLOCKED
+  SUSPENDED
 }
 
 enum Role {
-  USER
-  AUTHOR
+  CUSTOMER
+  PROVIDER
   ADMIN
 }
 
-enum PostStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
+enum RentalStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
 }
 
-enum CommentStatus {
-  APPROVED
-  REJECT
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
 }
 
-
-enum SubscriptionStatus{
-  ACTIVE
-  CANCELED
-  EXPIRED
+enum PaymentMethod {
+  STRIPE
+  SSLCOMMERZ
 }

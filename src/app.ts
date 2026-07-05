@@ -2,14 +2,9 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
 import cookieParser from "cookie-parser";
-import { UserRoutes } from "./modules/user/user.route";
 import { authRoutes } from "./modules/auth/auth.route";
-import { postRoutes } from "./modules/post/post.route";
-import { commentRoutes } from "./modules/comment/comment.route";
 import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
-import { subscriptionRoutes } from "./modules/subscription/subscription.route";
-import { premiumRoutes } from "./modules/premium/premium.route";
 const app: Application = express();
 
 const endpointSecret = config.stripe_webhook_secret;
@@ -80,12 +75,8 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
 });
 
-app.use("/api/users", UserRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/api/subscription", subscriptionRoutes);
-app.use("/api/premium",premiumRoutes)
+
 
 // app.use((req:Request,res:Response)=>{
 //     res.status(404).json({
