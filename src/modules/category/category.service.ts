@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { CreateCategoryPayload } from "./category.interface";
+import { CreateCategoryPayload, IUpdateCategory } from "./category.interface";
 
 const createCategory = async (payload: CreateCategoryPayload) => {
   const { name, description } = payload;
@@ -29,7 +29,11 @@ const createCategory = async (payload: CreateCategoryPayload) => {
 };
 
 const getAllCategories = async () => {
-    const category=await prisma.category.findMany();
+    const category=await prisma.category.findMany({
+        orderBy:{
+            createdAt:"desc"
+        }
+    });
 
     if(category.length===0){
         throw new Error("No categories found")
@@ -38,9 +42,61 @@ const getAllCategories = async () => {
     return category
 };
 
-const updateCategory = async () => {};
+const updateCategory = async (payload:IUpdateCategory,categoryId:string) => {
+    const{name,description}=payload;
+    const category=await prisma.category.findUnique({
+        where:{
+            id:categoryId
+        }
+    });
 
-const deleteCategory = async () => {};
+    if(!category){
+        throw new Error("No categoris found")
+    };
+
+    if (name) {
+    const existingCategory = await prisma.category.findUnique({
+      where: {
+        name,
+      },
+    });
+ 
+     if (existingCategory && existingCategory.id !== categoryId) {
+      throw new Error("Category already exists");
+    }
+  }
+
+   const updateCategory=await prisma.category.update({
+    where:{
+        id:categoryId
+    },
+   data: {
+  ...(name && { name }),
+  ...(description && { description }),
+}
+   });
+   return updateCategory;
+};
+
+const deleteCategory = async (categoryId: string) => {
+  const category = await prisma.category.findUnique({
+    where: {
+      id: categoryId,
+    },
+  });
+
+  if (!category) {
+    throw new Error("Category not found");
+  }
+
+  await prisma.category.delete({
+    where: {
+      id: categoryId,
+    },
+  });
+
+  return null;
+};
 
 export const categoryService = {
   createCategory,
