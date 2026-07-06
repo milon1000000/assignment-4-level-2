@@ -1,0 +1,42 @@
+User
+   │
+   ▼
+Category
+   │
+   ▼
+GearItem
+   │
+   ▼
+RentalOrder
+   │
+   ▼
+Payment
+   │
+   ▼
+Review
+
+
+
+
+Method	Endpoint
+POST	/api/provider/gears
+GET	/api/gears
+GET	/api/gears/:id
+PATCH	/api/provider/gears/:id
+DELETE	/api/provider/gears/:id
+GET	/api/provider/gears
+GET	/api/admin/gears
+
+
+
+
+
+Assignment অনুযায়ী Access Control
+API	Customer	Provider	Admin	Public
+GET /api/gears	✅	✅	✅	✅
+GET /api/gears/:id	✅	✅	✅	✅
+POST /api/provider/gears	❌	✅	❌	
+GET /api/provider/gears	❌	✅	❌	
+PATCH /api/provider/gears/:id	❌	✅ (নিজের)	❌	
+DELETE /api/provider/gears/:id	❌	✅ (নিজের)	❌	
+GET /api/admin/gears	❌	❌	✅	

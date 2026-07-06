@@ -6,6 +6,7 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { categoryRoutes } from "./modules/category/category.route";
+import { gearItemRoutes } from "./modules/gearItem/gearItem.route";
 const app: Application = express();
 
 const endpointSecret = config.stripe_webhook_secret;
@@ -28,6 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/gear",gearItemRoutes)
 
 app.use(notFound);
 
