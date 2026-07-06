@@ -4,8 +4,6 @@ import { authService } from "./auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 
-
-
 const registerUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -20,61 +18,44 @@ const registerUser = catchAsync(
   },
 );
 
+const loginUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const { accessToken } = await authService.loginUser(payload);
 
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24, //24 hour or 1 day
+    });
 
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "logged in successfully",
+      data: { accessToken },
+    });
+  },
+);
 
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
 
+    const result = await authService.getMyProfile(userId as string);
 
-// const loginUser = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const payload = req.body;
-//     const { accessToken, refreshToken } = await authService.loginUser(payload);
-
-//     res.cookie("accessToken", accessToken, {
-//       httpOnly: true,
-//       secure: false,
-//       sameSite: "none",
-//       maxAge: 1000 * 60 * 60 * 24, //24 hour or 1 day
-//     });
-
-//     res.cookie("refreshToken", refreshToken, {
-//       httpOnly: true,
-//       secure: false,
-//       sameSite: "none",
-//       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 day
-//     });
-
-//     sendResponse(res, {
-//       success: true,
-//       statusCode: httpStatus.CREATED,
-//       message: "logged in successfully",
-//       data: { accessToken, refreshToken },
-//     });
-//   },
-// );
-
-// const refreshToken = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const refreshToken = req.cookies.refreshToken;
-//     const { accessToken } = await authService.refreshToken(refreshToken);
-
-//     res.cookie("accessToken", accessToken, {
-//       httpOnly: true,
-//       secure: false,
-//       sameSite: "none",
-//       maxAge: 1000 * 60 * 60 * 24,
-//     });
-//     sendResponse(res, {
-//       success: true,
-//       statusCode: httpStatus.OK,
-//       message: "Token Refreshed successfully",
-//       data: { accessToken },
-//     });
-//   },
-// );
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Profile retrieved successfully",
+      data: result,
+    });
+  },
+);
 
 export const authController = {
   registerUser,
-  // loginUser,
-  // refreshToken,
+  loginUser,
+  getMyProfile,
 };

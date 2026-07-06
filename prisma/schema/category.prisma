@@ -11,3 +11,10 @@ model Category {
 
   @@map("categories")
 }
+
+
+
+// POST /api/categories (Admin)
+// GET /api/categories (Public)
+// PATCH /api/categories/:id (Admin)
+// DELETE /api/categories/:id (Admin)

@@ -59,8 +59,8 @@ export const auth = (...requiredRoles: Role[]) => {
       throw new Error("User not found. Please log in again");
     }
 
-    if (user.activeStatus === "BLOCKED") {
-      throw new Error("Your account has been blocked. Please contact support.");
+    if (user.status === "SUSPENDED") {
+      throw new Error("Your account has been suspended. Please contact support.");
     }
 
     req.user = {
