@@ -5,11 +5,12 @@ import cookieParser from "cookie-parser";
 import { authRoutes } from "./modules/auth/auth.route";
 import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import { categoryRoutes } from "./modules/category/category.route";
 const app: Application = express();
 
 const endpointSecret = config.stripe_webhook_secret;
-console.log(endpointSecret)
-app.use("/api/subscription/webhook",express.raw({type:'application/json'}))
+console.log(endpointSecret);
+app.use("/api/subscription/webhook", express.raw({ type: "application/json" }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,27 +27,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
-
-
-// app.use((req:Request,res:Response)=>{
-//     res.status(404).json({
-//         message:"Route not found",
-//         path:req.originalUrl,
-//         date:Date()
-//     })
-// })
+app.use("/api/categories", categoryRoutes);
 
 app.use(notFound);
-
-// app.use((err:any,req:Request,res:Response,next:NextFunction)=>{
-//     console.log(err)
-//      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-//         success:false,
-//         statusCode:httpStatus.INTERNAL_SERVER_ERROR,
-//         message:err.message,
-//         error:err.stack
-//     })
-// })
 
 app.use(globalErrorHandler);
 
