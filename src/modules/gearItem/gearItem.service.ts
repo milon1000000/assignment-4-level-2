@@ -13,15 +13,53 @@ const createGearItem = async (
   providerId: string,
 ) => {
   const {
-    name,
-    description,
-    image,
-    brand,
-    condition,
-    pricePerDay,
-    stock,
-    categoryId,
-  } = payload;
+  name,
+  description,
+  image,
+  brand,
+  condition,
+  pricePerDay,
+  stock,
+  categoryId,
+} = payload;
+
+if (!name) {
+  throw new Error("Name is required");
+}
+
+if (!description) {
+  throw new Error("Description is required");
+}
+
+if (!image) {
+  throw new Error("Image is required");
+}
+
+if (!brand) {
+  throw new Error("Brand is required");
+}
+
+if (pricePerDay === undefined || pricePerDay === null) {
+  throw new Error("Price per day is required");
+}
+
+if (pricePerDay <= 0) {
+  throw new Error("Price per day must be greater than 0");
+}
+
+if (stock === undefined || stock === null) {
+  throw new Error("Stock is required");
+}
+
+if (stock < 0) {
+  throw new Error("Stock cannot be negative");
+}
+
+if (!categoryId) {
+  throw new Error("Category is required");
+}
+
+   
 
   // Check provider
   const provider = await prisma.user.findUnique({
