@@ -1,23 +1,35 @@
 model RentalOrder {
-  id           String          @id @default(uuid())
+  id String @id @default(uuid())
 
-  quantity     Int             @default(1)
-  startDate    DateTime
-  endDate      DateTime
-  totalPrice   Float
-  status       RentalStatus    @default(PENDING)
+  quantity   Int          @default(1)
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Float
+  status     RentalStatus @default(PENDING)
 
   // Foreign Keys
-  customerId   String
-  gearItemId   String
+  customerId String
+  gearItemId String
 
   // Relations
-  customer      User        @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  gearItem      GearItem    @relation(fields: [gearItemId], references: [id], onDelete: Cascade)
-  payment       Payment?
+  customer User     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  gearItem GearItem @relation(fields: [gearItemId], references: [id], onDelete: Cascade)
+  payment  Payment?
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("rental_orders")
 }
+
+
+
+
+
+// POST	/api/rentals	Customer
+// GET	/api/rentals	Customer
+// GET	/api/rentals/:id	Customer
+// GET	/api/provider/orders	Provider
+// PATCH	/api/provider/orders/:id	Provider
+// GET	/api/admin/rentals	Admin
+// PATCH	/api/rentals/:id/cancel	Customer (Recommended)

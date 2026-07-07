@@ -105,6 +105,7 @@ const getAllGearItems = async (query: IGearQuery) => {
             mode: "insensitive",
           },
         },
+        
         {
           brand: {
             contains: query.searchTerm,
