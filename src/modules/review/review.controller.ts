@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { reviewService } from "./review.service";
+import { Role } from "../../../generated/prisma/enums";
 
 const createReview = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -70,12 +71,13 @@ const updateReview = catchAsync(async (req: Request, res: Response) => {
 const deleteReview = catchAsync(async (req: Request, res: Response) => {
   const reviewId = req.params.id;
   const userId = req.user?.id;
-  const role = req.user?.role;
+  const isAdmin = req.user?.role===Role.ADMIN;
 
   const result = await reviewService.deleteReview(
     reviewId as string,
     userId as string,
-    role as string
+    isAdmin
+    
   );
 
   sendResponse(res, {

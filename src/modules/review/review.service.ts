@@ -140,25 +140,142 @@ const getGearReviews = async (gearItemId: string) => {
 
   return {
     averageRating: reviewStats._avg.rating ?? 0,
-  totalReviews: reviewStats._count.id,
+    totalReviews: reviewStats._count.id,
     reviews,
-    reviewStats
+    reviewStats,
   };
 };
 
-const getMyReviews = async (customerId: string) => {};
+const getMyReviews = async (customerId: string) => {
+  if (!customerId) {
+    throw new Error("customerId is required");
+  }
+
+  const reviews = await prisma.review.findMany({
+    where: {
+      customerId,
+    },
+    include: {
+      customer: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  const reviewStats = await prisma.review.aggregate({
+    where: {
+      customerId,
+    },
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      id: true,
+    },
+  });
+
+  return {
+    averageRating: reviewStats._avg.rating ?? 0,
+    totalReviews: reviewStats._count.id,
+    reviews,
+  };
+};
 
 const updateReview = async (
   reviewId: string,
   customerId: string,
   payload: UpdateReviewPayload,
-) => {};
+) => {
+  const { rating, comment } = payload;
+
+  if (!reviewId) {
+    throw new Error("Review id is required");
+  }
+
+  const review = await prisma.review.findUnique({
+    where: {
+      id: reviewId,
+    },
+  });
+
+  if (!review) {
+    throw new Error("Review not found");
+  }
+
+  if (review.customerId !== customerId) {
+    throw new Error("You are not authorized to update this review");
+  }
+
+  if (rating !== undefined && (rating < 1 || rating > 5)) {
+    throw new Error("Rating must be between 1 and 5");
+  }
+
+  const updatedReview = await prisma.review.update({
+    where: {
+      id: reviewId,
+    },
+    data: {
+      ...(rating && { rating }),
+      ...(comment && { comment }),
+    },
+    include: {
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      gearItem: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          brand: true,
+        },
+      },
+    },
+  });
+
+  return updatedReview;
+};
 
 const deleteReview = async (
   reviewId: string,
   userId: string,
-  role: string,
-) => {};
+  isAdmin: boolean,
+) => {
+  if (!reviewId) {
+    throw new Error("Review id is required");
+  }
+
+  const review = await prisma.review.findUnique({
+    where: {
+      id: reviewId,
+    },
+  });
+
+  if (!review) {
+    throw new Error("Review not found");
+  }
+
+  if (!isAdmin && review.customerId !== userId) {
+    throw new Error("You are not authorized to delete this review");
+  }
+
+  await prisma.review.delete({
+    where: {
+      id: reviewId,
+    },
+  });
+
+  return null;
+};
 
 export const reviewService = {
   createReview,
