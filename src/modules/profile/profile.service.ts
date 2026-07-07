@@ -6,6 +6,9 @@ const updateMyProfile = async (
   payload: UpdateProfilePayload
 ) => {
     const{name,phone,address,profileImage}=payload;
+    if(!userId){
+      throw new Error("userId is required")
+    }
   const user = await prisma.user.findUnique({
     where: {
       id: userId,

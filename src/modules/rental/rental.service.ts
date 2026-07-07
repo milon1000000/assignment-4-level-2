@@ -8,6 +8,27 @@ const createRental = async (
 ) => {
   const { gearItemId, quantity, startDate, endDate } = payload;
 
+if (!gearItemId) {
+  throw new Error("Gear item id is required");
+}
+
+if (!quantity) {
+  throw new Error("Quantity is required");
+}
+
+if (quantity <= 0) {
+  throw new Error("Quantity must be greater than 0");
+}
+
+if (!startDate) {
+  throw new Error("Start date is required");
+}
+
+if (!endDate) {
+  throw new Error("End date is required");
+}
+
+
   const customer = await prisma.user.findUnique({
     where: {
       id: customerId,
