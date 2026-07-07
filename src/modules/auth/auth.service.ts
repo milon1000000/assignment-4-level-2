@@ -56,6 +56,13 @@ const registerUserIntoDB = async (payload: RegisterUserPayload) => {
 
 const loginUser = async (payload: ILoginUser) => {
   const { email, password } = payload;
+  if(!email){
+    throw new Error("email is required")
+  }
+
+  if(!password){
+    throw new Error("password is required")
+  }
 
   const user = await prisma.user.findUniqueOrThrow({
     where: { email },
