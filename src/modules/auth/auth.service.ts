@@ -8,6 +8,15 @@ import { Role } from "../../../generated/prisma/enums";
 
 const registerUserIntoDB = async (payload: RegisterUserPayload) => {
   const { name, email, password, profileImage, phone, address, role } = payload;
+  if(!name){
+    throw new Error("name is required")
+  }
+  if(!email){
+    throw new Error("email is required")
+  }
+  if(!password){
+    throw new Error("password is required")
+  }
   if (password.length < 6) {
     throw new Error("Password must be at least 6 characters long");
   }
