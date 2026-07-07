@@ -49,6 +49,25 @@ const getSingleGearItem = catchAsync(
   }
 );
 
+const getMyGearItems = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const providerId = req.user?.id;
+
+    const result = await gearItemService.getMyGearItems(
+      providerId as string
+    );
+
+    sendResponse(res,{
+      success:true,
+      statusCode:httpStatus.OK,
+      message:"Provider gear items retrieved successfully",
+      data:result
+    });
+
+  }
+);
+
 const updateGearItem = catchAsync(
   async (req: Request, res: Response,next:NextFunction) => {
     const providerId = req.user?.id;
@@ -107,6 +126,7 @@ export const gearItemController = {
   createGearItem,
   getAllGearItems,
   getSingleGearItem,
+  getMyGearItems,
   updateGearItem,
   deleteGearItem,
 };

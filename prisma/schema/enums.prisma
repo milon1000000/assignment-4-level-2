@@ -12,7 +12,9 @@ enum Role {
 enum RentalStatus {
   PENDING
   CONFIRMED
-  COMPLETED
+  PAID
+  PICKED_UP
+  RETURNED
   CANCELLED
 }
 

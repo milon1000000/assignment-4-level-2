@@ -105,7 +105,7 @@ const getAllGearItems = async (query: IGearQuery) => {
             mode: "insensitive",
           },
         },
-        
+
         {
           brand: {
             contains: query.searchTerm,
@@ -216,6 +216,43 @@ const getSingleGearItem = async (gearId: string) => {
   return gear;
 };
 
+const getMyGearItems = async (providerId: string) => {
+  const provider = await prisma.user.findUnique({
+    where: {
+      id: providerId,
+    },
+  });
+
+  if (!provider) {
+    throw new Error("Provider not found");
+  }
+
+  if (provider.role !== Role.PROVIDER) {
+    throw new Error("Only provider can access this data");
+  }
+
+  const gearItems = await prisma.gearItem.findMany({
+    where: {
+      providerId,
+    },
+    include: {
+      category: true,
+      provider: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return gearItems;
+};
+
 const updateGearItem = async (
   gearItemId: string,
   payload: UpdateGearItemPayload,
@@ -322,6 +359,7 @@ export const gearItemService = {
   createGearItem,
   getAllGearItems,
   getSingleGearItem,
+  getMyGearItems,
   updateGearItem,
   deleteGearItem,
 };
