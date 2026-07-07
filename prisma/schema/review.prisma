@@ -17,3 +17,10 @@ model Review {
   @@unique([customerId, gearItemId])
   @@map("reviews")
 }
+
+
+// POST	/api/reviews	Customer
+// GET	/api/reviews/gear/:gearId	Public
+// GET	/api/reviews/my	Customer
+// PATCH	/api/reviews/:reviewId	Customer
+// DELETE	/api/reviews/:reviewId	Customer/Admin

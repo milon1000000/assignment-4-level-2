@@ -9,6 +9,7 @@ import { categoryRoutes } from "./modules/category/category.route";
 import { gearItemRoutes } from "./modules/gearItem/gearItem.route";
 import { profileRoutes } from "./modules/profile/profile.route";
 import { rentalRoutes } from "./modules/rental/rental.route";
+import { reviewRoutes } from "./modules/review/review.route";
 const app: Application = express();
 
 const endpointSecret = config.stripe_webhook_secret;
@@ -33,7 +34,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/gear",gearItemRoutes);
 app.use("/api/profile",profileRoutes);
-app.use("/api/rentals",rentalRoutes)
+app.use("/api/rentals",rentalRoutes);
+app.use("/api/reviews",reviewRoutes)
 
 app.use(notFound);
 
