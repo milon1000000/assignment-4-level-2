@@ -154,7 +154,31 @@ const getMyPayments = async (customerId: string) => {
   return payments;
 };
 
-const getSinglePayment = async (paymentId: string) => {};
+const getSinglePayment = async (paymentId: string) => {
+  const payment = await prisma.payment.findUniqueOrThrow({
+    where: {
+      id: paymentId,
+    },
+    include: {
+      customer: {
+        omit: {
+          password: true,
+        },
+      },
+      rentalOrder: {
+        include: {
+          gearItem: {
+            omit: {
+              stock: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return payment;
+};
 
 export const paymentService = {
   createPayment,

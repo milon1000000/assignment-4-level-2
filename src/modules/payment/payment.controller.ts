@@ -6,12 +6,11 @@ import { paymentService } from "./payment.service";
 
 const createPayment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const customerId = req.user?.id;
-    const payload=req.body;
+    const payload = req.body;
     const result = await paymentService.createPayment(
-        payload,
-      customerId as string
+      payload,
+      customerId as string,
     );
 
     sendResponse(res, {
@@ -20,15 +19,15 @@ const createPayment = catchAsync(
       message: "Payment session created successfully",
       data: result,
     });
-  }
+  },
 );
 
 const confirmPayment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-   const signature = req.headers["stripe-signature"] as string;
-   const payload=req.body;
+    const signature = req.headers["stripe-signature"] as string;
+    const payload = req.body;
 
-    const result = await paymentService.confirmPayment(payload,signature);
+    const result = await paymentService.confirmPayment(payload, signature);
 
     sendResponse(res, {
       success: true,
@@ -36,42 +35,34 @@ const confirmPayment = catchAsync(
       message: "Payment confirmed successfully",
       data: result,
     });
-  }
+  },
 );
 
-const getMyPayments = catchAsync(
-  async (req: Request, res: Response) => {
+const getMyPayments = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user?.id;
 
-    const customerId = req.user?.id;
+  const result = await paymentService.getMyPayments(customerId as string);
 
-    const result = await paymentService.getMyPayments(customerId as string);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payments retrieved successfully",
+    data: result,
+  });
+});
 
-    sendResponse(res,{
-      success:true,
-      statusCode:httpStatus.OK,
-      message:"Payments retrieved successfully",
-      data:result
-    });
+const getSinglePayment = catchAsync(async (req: Request, res: Response) => {
+  const paymentId = req.params.id;
 
-  }
-);
+  const result = await paymentService.getSinglePayment(paymentId as string);
 
-const getSinglePayment = catchAsync(
-  async (req: Request, res: Response) => {
-
-    const paymentId = req.params.id;
-
-    const result = await paymentService.getSinglePayment(paymentId as string);
-
-    sendResponse(res,{
-      success:true,
-      statusCode:httpStatus.OK,
-      message:"Payment retrieved successfully",
-      data:result
-    });
-
-  }
-);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payment retrieved successfully",
+    data: result,
+  });
+});
 
 export const paymentController = {
   createPayment,
