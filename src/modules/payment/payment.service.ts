@@ -37,6 +37,9 @@ const createPayment = async (
       throw new Error("Returned rental cannot be paid");
     }
 
+    if (rentalOrder.status !== RentalStatus.CONFIRMED) {
+  throw new Error("Rental order is not confirmed.");
+}
     const existingPayment = await tx.payment.findUnique({
       where: { rentalOrderId },
     });

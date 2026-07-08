@@ -11,6 +11,7 @@ import { rentalRoutes } from "./modules/rental/rental.route";
 import { reviewRoutes } from "./modules/review/review.route";
 import { userRoutes } from "./modules/user/user.route";
 import { PaymentRoutes } from "./modules/payment/payment.route";
+import { adminRoutes } from "./modules/admin/admin.route";
 const app: Application = express();
 
 const endpointSecret = config.stripe_webhook_secret;
@@ -37,7 +38,8 @@ app.use("/api/gear",gearItemRoutes);
 app.use("/api/user",userRoutes);
 app.use("/api/rentals",rentalRoutes);
 app.use("/api/reviews",reviewRoutes);
-app.use("/api/payments",PaymentRoutes)
+app.use("/api/payments",PaymentRoutes);
+app.use("/api/admin",adminRoutes)
 
 app.use(notFound);
 
