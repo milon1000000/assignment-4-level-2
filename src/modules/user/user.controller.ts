@@ -1,14 +1,14 @@
 import  httpStatus  from 'http-status';
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
-import { profileService } from "./profile.service";
 import { sendResponse } from "../../utils/sendResponse";
+import { userService } from './user.service';
 
 const updateMyProfile = catchAsync(
   async (req: Request, res: Response,next:NextFunction) => {
     const userId = req.user?.id;
 
-    const result = await profileService.updateMyProfile(
+    const result = await userService.updateMyProfile(
       userId as string,
       req.body
     );
@@ -26,7 +26,7 @@ const deleteMyProfile = catchAsync(
   async (req: Request, res: Response) => {
     const userId = req.user?.id;
 
-    await profileService.deleteMyProfile(userId as string);
+    await userService.deleteMyProfile(userId as string);
 
     sendResponse(res, {
       success: true,
@@ -37,7 +37,7 @@ const deleteMyProfile = catchAsync(
   }
 );
 
-export const profileController = {
+export const userController = {
   updateMyProfile,
   deleteMyProfile,
 };

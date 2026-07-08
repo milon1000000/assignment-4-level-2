@@ -18,13 +18,21 @@ enum RentalStatus {
   CANCELLED
 }
 
-enum PaymentStatus {
-  PENDING
-  PAID
-  FAILED
+enum PaymentProvider {
+  STRIPE
+  SSLCOMMERZ
 }
 
 enum PaymentMethod {
-  STRIPE
-  SSLCOMMERZ
+  CARD
+  BKASH
+  NAGAD
+  ROCKET
+  BANK
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
 }

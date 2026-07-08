@@ -71,7 +71,6 @@ const getMyGearItems = catchAsync(
 const updateGearItem = catchAsync(
   async (req: Request, res: Response,next:NextFunction) => {
     const providerId = req.user?.id;
-    const isAdmin = req.user?.role === Role.ADMIN;
 
     const { id } = req.params;
     const payload = req.body;
@@ -84,7 +83,6 @@ const updateGearItem = catchAsync(
       id as string,
       payload,
       providerId as string,
-      isAdmin,
     );
 
     sendResponse(res, {
@@ -99,7 +97,6 @@ const updateGearItem = catchAsync(
 const deleteGearItem = catchAsync(
   async (req: Request, res: Response,next:NextFunction) => {
     const providerId = req.user?.id;
-    const isAdmin = req.user?.role === Role.ADMIN;
 
     const { id } = req.params;
 
@@ -110,7 +107,6 @@ const deleteGearItem = catchAsync(
     const result = await gearItemService.deleteGearItem(
       id as string,
       providerId as string,
-      isAdmin,
     );
 
     sendResponse(res, {

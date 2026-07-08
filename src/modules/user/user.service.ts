@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { UpdateProfilePayload } from "./profile.ts.interface";
+import { UpdateProfilePayload } from "./user.ts.interface";
 
 const updateMyProfile = async (
   userId: string,
@@ -57,7 +57,7 @@ const deleteMyProfile = async (userId: string) => {
   return null;
 };
 
-export const profileService = {
+export const userService = {
   updateMyProfile,
   deleteMyProfile,
 };

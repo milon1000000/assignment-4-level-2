@@ -295,7 +295,6 @@ const updateGearItem = async (
   gearItemId: string,
   payload: UpdateGearItemPayload,
   providerId: string,
-  isAdmin: boolean,
 ) => {
   const {
     name,
@@ -314,9 +313,7 @@ const updateGearItem = async (
     },
   });
 
-  if (!isAdmin && gearItem.providerId !== providerId) {
-    throw new Error("You are not the owner of this gear item");
-  }
+  
 
   if (categoryId) {
     const category = await prisma.category.findUnique({
@@ -328,6 +325,10 @@ const updateGearItem = async (
     if (!category) {
       throw new Error("Category not found");
     }
+  }
+
+  if (gearItem.providerId !== providerId) {
+    throw new Error("You are not the owner of this gear item");
   }
 
   const result = await prisma.gearItem.update({
@@ -372,7 +373,6 @@ const updateGearItem = async (
 const deleteGearItem = async (
   gearItemId: string,
   providerId: string,
-  isAdmin: boolean,
 ) => {
   const gearItem = await prisma.gearItem.findFirstOrThrow({
     where: {
@@ -380,7 +380,7 @@ const deleteGearItem = async (
     },
   });
 
-  if (!isAdmin && gearItem.providerId !== providerId) {
+  if (gearItem.providerId !== providerId) {
     throw new Error("You are not the owner of this gear item");
   }
 

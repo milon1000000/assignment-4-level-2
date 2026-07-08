@@ -119,24 +119,35 @@ if (!endDate) {
 
 
 
-const getMyRentals = async (customerId:string) => {
- const rentals = await prisma.rentalOrder.findMany({
-  where: {
-    customerId,
-  },
-  include: {
-    gearItem: {
-        omit:{
-            stock:true
-        }
+const getMyRentals = async (customerId: string) => {
+  const rentals = await prisma.rentalOrder.findMany({
+    where: {
+      customerId,
     },
-    payment: true,
-  },
-  orderBy: {
-    createdAt: "desc",
-  },
-});
-return rentals;
+    include: {
+      gearItem: {
+        include: {
+          provider: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          category: true,
+        },
+        omit: {
+          stock: true,
+        },
+      },
+      payment: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return rentals;
 };
 
 const getSingleRental = async (
