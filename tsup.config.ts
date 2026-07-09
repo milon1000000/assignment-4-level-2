@@ -1,5 +1,6 @@
 import { defineConfig } from "tsup";
 
+
 export default defineConfig({
   entry: ["src/server.ts"],
   format: ["esm"], // Keep this as ESM
@@ -9,7 +10,7 @@ export default defineConfig({
   bundle: true,
   splitting: false,
   sourcemap: true,
-  // Externalize Prisma packages - they need to be installed in node_modules at runtime
+  // Externalize Prisma packages — they need to be installed in node_modules at runtime
   external: [
     "@prisma/client",
     "@prisma/adapter-pg",
